@@ -4,7 +4,7 @@ import './header.css'
 function Header({cart}) {
   let totalQuantity = 0; 
 
-  cart.foreach((cartItem)=>{
+  cart.forEach((cartItem)=>{
     totalQuantity += cartItem.quantity
   })
   return (
