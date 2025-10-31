@@ -77,4 +77,4 @@ function TrackingPage() {
     </>
   )
 }
-export default TrackingPage()
+export default TrackingPage
