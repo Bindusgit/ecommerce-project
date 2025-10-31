@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { useState, useEffect, Fragment } from 'react'
@@ -49,6 +50,7 @@ function OrdersPage({ cart }) {
 
                 <div className="order-details-grid">
                   {order.products.map((orderProduct) => {
+                    console.log('orderProduct:', orderProduct)
                     return (
                       <Fragment key={orderProduct.product.id}>
                         <div className="product-image-container">
@@ -72,11 +74,11 @@ function OrdersPage({ cart }) {
                         </div>
 
                         <div className="product-actions">
-                          <a href="/tracking">
+                          <Link to={`/tracking/${order.id}/${orderProduct.product.id}`}>
                             <button className="track-package-button button-secondary">
                               Track package
                             </button>
-                          </a>
+                          </Link>
                         </div>
                       </Fragment>
                     )
