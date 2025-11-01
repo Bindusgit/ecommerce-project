@@ -4,40 +4,31 @@ import dayjs from 'dayjs';
 import axios from 'axios';
 import "../components/header.css";
 import './TrackingPage.css';
+import Header from '../components/Header';
 
-function TrackingPage() {
+function TrackingPage({ cart }) {
   // ✅ Get params from URL
   const { orderId, productId } = useParams();
+  const [order, setOrder] = useState(null);
 
-  // ✅ Local state for the tracking data
-  const [orderProduct, setOrderProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
-    async function fetchTrackingData() {
-      try {
-        const response = await axios.get(`/api/orders/${orderId}?expand=products`);
-        const orderData = response.data;
-
-        // Find the specific product within the order
-        const foundProduct = orderData.products.find(
-          (p) => p.product.id === productId
-        );
-
-        setOrderProduct(foundProduct);
-      } catch (error) {
-        console.error('Error fetching tracking data:', error);
-      } finally {
-        setLoading(false);
-      }
+    const fetchTrackingData = async () => {
+      const response = await axios.get(`/api/orders/${orderId}?expand=products`);
+      setOrder(response.data);
     }
 
     fetchTrackingData();
-  }, [orderId, productId]);
+  }, [orderId]);
 
-  if (loading) {
-    return <div className="tracking-page"><p>Loading tracking info...</p></div>;
+  if (!order) {
+    return null;
   }
+  const orderProduct = order.products.find(
+    (p) => p.product.id === productId
+  );
+
 
   if (!orderProduct) {
     return (
@@ -48,39 +39,25 @@ function TrackingPage() {
   }
 
   // ✅ Format delivery date
-  const formattedDate = dayjs(orderProduct.estimatedDeliveryTimeMs).format('dddd, MMMM D');
+  const totalDeliveryTimeMs = orderProduct.estimatedDeliveryTimeMs - order.orderTimeMs;
+  const timePassedMs = dayjs().valueOf() - order.orderTimeMs;
+  console.log("-------", totalDeliveryTimeMs)
+  // const timePassedMs = totalDeliveryTimeMs * 0.10;
+
+  let deliveryPercent = (timePassedMs / totalDeliveryTimeMs) * 100;
+  if (deliveryPercent > 100) {
+    deliveryPercent = 100;
+  }
+
+  const isPreparing = deliveryPercent < 33;
+  const isShipped = deliveryPercent >= 33 && deliveryPercent < 100;
+  const isDelivered = deliveryPercent === 100;
 
   return (
     <>
       <title>Tracking</title>
 
-      <div className="header">
-        <div className="left-section">
-          <a href="/" className="header-link">
-            <img className="logo" src="images/logo-white.png" alt="Logo" />
-            <img className="mobile-logo" src="images/mobile-logo-white.png" alt="Mobile Logo" />
-          </a>
-        </div>
-
-        <div className="middle-section">
-          <input className="search-bar" type="text" placeholder="Search" />
-          <button className="search-button">
-            <img className="search-icon" src="images/icons/search-icon.png" alt="Search" />
-          </button>
-        </div>
-
-        <div className="right-section">
-          <a className="orders-link header-link" href="/orders">
-            <span className="orders-text">Orders</span>
-          </a>
-
-          <a className="cart-link header-link" href="/checkout">
-            <img className="cart-icon" src="images/icons/cart-icon.png" alt="Cart" />
-            <div className="cart-quantity">3</div>
-            <div className="cart-text">Cart</div>
-          </a>
-        </div>
-      </div>
+      <Header cart={cart} />
 
       <div className="tracking-page">
         <div className="order-tracking">
@@ -90,7 +67,8 @@ function TrackingPage() {
 
           {/* ✅ Dynamic delivery info */}
           <div className="delivery-date">
-            Arriving on {formattedDate}
+            {deliveryPercent >= 100 ? 'Delivered on' : 'Arriving on'}
+            {dayjs(orderProduct.estimatedDeliveryTimeMs).format('dddd, MMMM D')}
           </div>
 
           <div className="product-info">
@@ -109,13 +87,15 @@ function TrackingPage() {
 
           {/* ✅ Progress section — can later be made dynamic */}
           <div className="progress-labels-container">
-            <div className="progress-label">Preparing</div>
-            <div className="progress-label current-status">Shipped</div>
-            <div className="progress-label">Delivered</div>
+            <div className={`progress-label ${isPreparing && 'current-status'}`}>Preparing</div>
+            <div className={`progress-label ${isShipped && 'current-status'}`}>Shipped</div>
+            <div className={`progress-label ${isDelivered && 'current-status'}`}>Delivered</div>
           </div>
 
           <div className="progress-bar-container">
-            <div className="progress-bar"></div>
+            <div className="progress-bar" style={{
+              width: `${deliveryPercent}%`
+            }}></div>
           </div>
         </div>
       </div>
