@@ -30,7 +30,7 @@ export function PaymentSummary({ paymentSummary }) {
 
           <div className="payment-summary-row total-row">
             <div>Order total:</div>
-            <div className="payment-summary-money">{ }formatMoney(paymenySummary.totalCostCents)</div>
+            <div className="payment-summary-money">{formatMoney(paymentSummary.totalCostCents)}</div>
           </div>
 
           <button className="place-order-button button-primary">
