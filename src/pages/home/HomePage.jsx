@@ -1,33 +1,33 @@
 import axios from 'axios'
-import {useEffect, useState} from 'react'
-import {useSearchParams} from 'react-router'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router'
 import Header from '../../components/Header'
-import {ProductsGrid} from './ProductsGrid'
+import { ProductsGrid } from './ProductsGrid'
 import './HomePage.css'
 
-function HomePage({cart, loadCart }) {
+function HomePage({ cart, loadCart }) {
   const [products, setProducts] = useState([]);
   const [searchParams] = useSearchParams()
   const search = searchParams.get('search')
-  useEffect(()=>{
+  useEffect(() => {
 
-       // Temporarily add console.log to check if useEffect runs once.
+    // Temporarily add console.log to check if useEffect runs once.
     console.log('useEffect');
 
-      const getHomeData = async () => {
-              const urlPath = search? `/api/products?search=${search}` : '/api/products'
-              const response = await axios.get(urlPath)
-      setProducts(response.data)  
-      }
-      getHomeData()
+    const getHomeData = async () => {
+      const urlPath = search ? `/api/products?search=${search}` : '/api/products'
+      const response = await axios.get(urlPath)
+      setProducts(response.data)
+    }
+    getHomeData()
   }, [search]);
- 
+
   return (
     <>
       <title>Ecommerce Project</title>
       <Header cart={cart} />
       <div className="home-page">
-        <ProductsGrid products={products} loadCart={loadCart}/>
+        <ProductsGrid products={products} loadCart={loadCart} />
       </div>
     </>
   )

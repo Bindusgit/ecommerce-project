@@ -12,10 +12,10 @@ function Product({ product, loadCart }) {
       quantity
     })
     await loadCart()
-     setShowAddedMessage(true);
+    setShowAddedMessage(true);
     setTimeout(() => {
       setShowAddedMessage(false);
-    }, 2000); 
+    }, 2000);
   }
   const selectQuantity = (event) => {
     const quantitySelected = Number(event.target.value)
@@ -80,7 +80,7 @@ function Product({ product, loadCart }) {
         onClick={addToCart}>
         Add to Cart
       </button>
-        
+
 
     </div>
   )
