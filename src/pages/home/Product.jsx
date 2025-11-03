@@ -4,16 +4,18 @@ import axios from 'axios'
 
 function Product({ product, loadCart }) {
   const [quantity, setQuantity] = useState(1)
-  const [added, setAdded] = useState(false) // state to track "Added" message
+  const [showAddedMessage, setShowAddedMessage] = useState(false); // state to track "Added" message
 
-  const addtoCart = async () => {
+  const addToCart = async () => {
     await axios.post('/api/cart-items', {
       productId: product.id,
       quantity
     })
     await loadCart()
-    setAdded(true)
-    setTimeout(() => setAdded(false), 1500) 
+     setShowAddedMessage(true);
+    setTimeout(() => {
+      setShowAddedMessage(false);
+    }, 2000); 
   }
   const selectQuantity = (event) => {
     const quantitySelected = Number(event.target.value)
@@ -59,18 +61,27 @@ function Product({ product, loadCart }) {
 
       <div className="product-spacer"></div>
 
-      <div className="added-to-cart">
+      <div className="added-to-cart" style={{
+        opacity: showAddedMessage ? 1 : 0,
+      }}>
         <img src="images/icons/checkmark.png" />
         Added
       </div>
 
-      <button
+      {/* <button
         className="add-to-cart-button button-primary"
         onClick={addtoCart}
         disabled={added} // optional: disable temporarily
       >
         {added ? 'Added!' : 'Add to Cart'}
+      </button> */}
+
+      <button className="add-to-cart-button button-primary"
+        onClick={addToCart}>
+        Add to Cart
       </button>
+        
+
     </div>
   )
 }

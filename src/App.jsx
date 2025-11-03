@@ -7,6 +7,8 @@ import OrdersPage from './pages/orders/OrdersPage'
 import TrackingPage from './pages/TrackingPage'
 import './App.css'
 
+
+
 function App() {
   const [cart, setCart] = useState([]) //lifted up state from homepage
   

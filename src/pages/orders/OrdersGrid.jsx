@@ -9,7 +9,7 @@ function OrdersGrid({ orders, loadCart }) {
     try {
       await axios.post('/api/cart-items', {
         productId,
-        quantity
+        quantity:1
       })
       if (loadCart) {
         await loadCart()
