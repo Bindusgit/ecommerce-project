@@ -27,9 +27,9 @@ function Header({cart}) {
       <div className="left-section">
         <Link to="/" className="header-link">
           <img className="logo"
-            src="images/logo-white.png" />
+            src="/images/mobile-logo.png" alt="StopNShop" />
           <img className="mobile-logo"
-            src="images/mobile-logo-white.png" />
+            src="/images/mobile-logo.png" alt="StopNShop" />
         </Link>
       </div>
 
