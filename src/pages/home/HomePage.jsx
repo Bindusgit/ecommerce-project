@@ -15,7 +15,8 @@ function HomePage({ cart, loadCart }) {
     console.log('useEffect');
 
     const getHomeData = async () => {
-      const urlPath = search ? `/api/products?search=${search}` : '/api/products'
+      const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+      const urlPath = `${API_BASE}/api/products${search ? `?search=${search}` : ''}`
       const response = await axios.get(urlPath)
       setProducts(response.data)
     }
