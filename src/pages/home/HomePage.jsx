@@ -15,7 +15,7 @@ function HomePage({ cart, loadCart }) {
     console.log('useEffect');
 
     const getHomeData = async () => {
-      const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+      const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://ecommerce-backend-6b9u2py9m-bindus-projects-a7a6ecd0.vercel.app'
       const urlPath = `${API_BASE}/api/products${search ? `?search=${search}` : ''}`
       const response = await axios.get(urlPath)
       setProducts(response.data)
